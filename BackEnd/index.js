@@ -31,6 +31,11 @@ app.use("/api/user",userRoute);
 app.use("/api/message",messageRoute);
 app.use("/api/otp", otpRoute);
 
+// ADDED THIS NEW ROUTE
+app.get('/', (req, res) => {
+  res.send('Chat app BackEnd is running!')
+});
+
 server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
 })
