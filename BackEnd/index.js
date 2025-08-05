@@ -7,6 +7,8 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { app, server } from './SocketIO/server.js';
 import otpRoute from './routes/otp.route.js';
+import path from 'path';
+
 
 dotenv.config();
 
@@ -39,3 +41,11 @@ app.get('/', (req, res) => {
 server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
 })
+
+const __dirname = path.resolve();
+// Serve frontend
+app.use(express.static(path.join(__dirname, 'frontend/build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend/build/index.html'));
+  });
+
