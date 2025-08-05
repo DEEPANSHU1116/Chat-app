@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import { app, server } from './SocketIO/server.js';
 import otpRoute from './routes/otp.route.js';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 
 dotenv.config();
@@ -42,10 +43,16 @@ server.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`)
 })
 
-const __dirname = path.resolve();
-// Serve frontend
-app.use(express.static(path.join(__dirname, 'frontend/build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend/build/index.html'));
-  });
 
+// Required if you're using ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'build')));
+
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
